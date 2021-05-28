@@ -3,8 +3,15 @@ from discord.ext import commands
 import os
 
 client = commands.AutoShardedBot(command_prefix = 'p', description="Pharalysis bot made for mallusrgreat to learn Python!")
+
+client.blacklisted_users = []
+
 client.remove_command('help')
 for filename in os.listdir('./cogs'):
+    if filename.endswith('.py'):
+        client.load_extension(f'cogs.{filename[:-3]}')
+
+for filename in os.listdir('./events'):
     if filename.endswith('.py'):
         client.load_extension(f'cogs.{filename[:-3]}')
 

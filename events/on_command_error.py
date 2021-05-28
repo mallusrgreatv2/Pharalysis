@@ -2,19 +2,11 @@ import discord
 from discord.ext import commands
 import datetime, time
 
-class Events(commands.Cog):
+class OnCommandError(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.Cog.listener()
-    async def on_ready(self):
-        print(f'Bot Ready | {self.client.user.id}')
-        global start_time
-        start_time = time.time()
     
-
-
-
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         if hasattr(ctx.command, 'on_error'):
@@ -43,4 +35,4 @@ class Events(commands.Cog):
 
     
 def setup(client):
-    client.add_cog(Events(client))
+    client.add_cog(OnCommandError(client))

@@ -10,6 +10,7 @@ class Help(commands.Cog):
     async def help(self, ctx):
         embed = discord.Embed(title="Help - Commands", description="Write `phelp <command>` for more information about the command.")
         embed.add_field(name='Help', value="`help`")
+        embed.add_field(name="Utility", value="`createEmbed`")
         await ctx.send(embed=embed)
     
 def setup(client):
