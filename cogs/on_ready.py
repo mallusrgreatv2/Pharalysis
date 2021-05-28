@@ -17,6 +17,7 @@ class OnReady(commands.Cog):
         global start_time
         start_time = time.time()
         data = read_json("blacklists")
+        self.client.blacklisted_users = data["blacklisted_users"]
     
 def setup(client):
     client.add_cog(OnReady(client))
@@ -24,7 +25,6 @@ def setup(client):
 def read_json(filename):
     with open(f"{cwd}/Dicts/{filename}.json", "r") as file:
         data = json.load(file)
-
     return data
 
 def write_json(data, filename):

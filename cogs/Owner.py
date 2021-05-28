@@ -1,4 +1,4 @@
-from events.on_ready import read_json, write_json
+from cogs.on_ready import read_json, write_json
 import discord
 from discord.ext import commands
 import io
@@ -17,7 +17,7 @@ class OwnerCommands(commands.Cog):
         data = read_json("blacklists")
         data["blacklisted_users"].append(user.id)
         write_json(data, "blacklists")
-        await ctx.send(f"Unblacklisted {user.name}")
+        await ctx.send(f"blacklisted {user.name}")
 
     @commands.command(name="unblacklist")
     @commands.is_owner()
