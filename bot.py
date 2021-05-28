@@ -19,6 +19,7 @@ async def on_message(message: discord.Message):
             await message.channel.send(message.author.id) 
         
         await client.process_commands(message=message)
+        
 
 client.remove_command('help')
 for filename in os.listdir('./cogs'):
