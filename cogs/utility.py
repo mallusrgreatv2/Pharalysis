@@ -13,7 +13,7 @@ class Utility(commands.Cog):
         """
         embed = discord.Embed(title=title, description=description)
         embed.set_footer(text=footer)
-
+        await ctx.send(embed=embed)
 
 
 def setup(client: commands.Bot):
