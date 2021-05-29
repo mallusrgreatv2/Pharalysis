@@ -34,12 +34,12 @@ async def get_prefix(bot, message):
 
 
 # Defining a few things
-DEFAULTPREFIX = '!'
+DEFAULTPREFIX = 'p'
 secret_file = utils.json_loader.read_json("secrets")
 bot = commands.Bot(
     command_prefix=get_prefix,
     case_insensitive=True,
-    owner_id=271612318947868673,
+    owner_id=700397009336533032,
     help_command=None
 )  # change command_prefix='-' to command_prefix=get_prefix for custom prefixes
 bot.config_token = secret_file["token"]
@@ -51,7 +51,7 @@ bot.blacklisted_users = []
 bot.muted_users = {}
 bot.cwd = cwd
 
-bot.version = "15"
+bot.version = "2.0"
 
 bot.colors = {
     "WHITE": 0xFFFFFF,
@@ -85,7 +85,7 @@ async def on_ready():
     )
     await bot.change_presence(
         activity=discord.Game(
-            name="Waves in brail"
+            name="Default Prefix: `p` | Change with `pprefix <new prefix>`"
         )
     )  # This changes the bots 'activity'
 
