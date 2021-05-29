@@ -13,7 +13,7 @@ class Misc(commands.Cog):
         print(f"{self.__class__.__name__} Cog has been loaded\n-----")
 
     @commands.command(
-        name="stats", description="A usefull command that displays bot statistics."
+        name="stats", description="A useful command that displays bot statistics."
     )
     async def stats(self, ctx):
         pythonVersion = platform.python_version()
@@ -33,7 +33,7 @@ class Misc(commands.Cog):
         embed.add_field(name="Discord.Py Version", value=dpyVersion)
         embed.add_field(name="Total Guilds:", value=serverCount)
         embed.add_field(name="Total Users:", value=memberCount)
-        embed.add_field(name="Bot Developers:", value="<@271612318947868673>")
+        embed.add_field(name="Bot Developers:", value="<@700397009336533032> | mallusrgreat#6991")
 
         embed.set_footer(text=f"Carpe Noctem | {self.bot.user.name}")
         embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
