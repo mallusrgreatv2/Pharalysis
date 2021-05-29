@@ -99,7 +99,7 @@ class Giveaway(commands.Cog):
         users.pop(users.index(ctx.author))
 
         if len(users) == 0:
-            await channel.send("No winner was decided")
+            await channel.send("Could not determine a winner")
             return
 
         winner = random.choice(users)
