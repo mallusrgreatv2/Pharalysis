@@ -1,8 +1,13 @@
 # Standard libraries
+import contextlib
+import io
 import os
 import logging
 
 # Third party libraries
+import textwrap
+from traceback import format_exception
+
 import discord
 from pathlib import Path
 import motor.motor_asyncio
@@ -11,6 +16,7 @@ from discord.ext import commands
 # Local code
 import utils.json_loader
 from utils.mongo import Document
+from utils.util import clean_code, Pag
 
 cwd = Path(__file__).parents[0]
 cwd = str(cwd)
@@ -33,17 +39,21 @@ async def get_prefix(bot, message):
         return commands.when_mentioned_or(bot.DEFAULTPREFIX)(bot, message)
 
 
-# Defining a few things
-DEFAULTPREFIX = 'p'
+intents = discord.Intents.all()  # Help command requires member intents
+DEFAULTPREFIX = "!"
 secret_file = utils.json_loader.read_json("secrets")
 bot = commands.Bot(
     command_prefix=get_prefix,
     case_insensitive=True,
-    owner_id=700397009336533032,
-    help_command=None
+    owner_id=271612318947868673,
+    help_command=None,
+    intents=intents,
 )  # change command_prefix='-' to command_prefix=get_prefix for custom prefixes
 bot.config_token = secret_file["token"]
 bot.connection_url = secret_file["mongo"]
+
+bot.joke_api_key = secret_file["x-rapidapi-key"]
+
 logging.basicConfig(level=logging.INFO)
 
 bot.DEFAULTPREFIX = DEFAULTPREFIX
@@ -51,7 +61,7 @@ bot.blacklisted_users = []
 bot.muted_users = {}
 bot.cwd = cwd
 
-bot.version = "2.0"
+bot.version = "15"
 
 bot.colors = {
     "WHITE": 0xFFFFFF,
@@ -84,15 +94,8 @@ async def on_ready():
         f"-----\nLogged in as: {bot.user.name} : {bot.user.id}\n-----\nMy current prefix is: {bot.DEFAULTPREFIX}\n-----"
     )
     await bot.change_presence(
-        activity=discord.Game(
-            name="Default Prefix: `p` | Change with `pprefix <new prefix>`"
-        )
+        activity=discord.Game(name="Cries in Binary | 00111010 00101000")
     )  # This changes the bots 'activity'
-
-    bot.mongo = motor.motor_asyncio.AsyncIOMotorClient(str(bot.connection_url))
-    bot.db = bot.mongo["menudocs"]
-    bot.config = Document(bot.db, "config")
-    bot.mutes = Document(bot.db, "mutes")
 
     for document in await bot.config.get_all():
         print(document)
@@ -121,7 +124,7 @@ async def on_message(message):
     if message.content.startswith(f"<@!{bot.user.id}>") and len(message.content) == len(
         f"<@!{bot.user.id}>"
     ):
-        data = await bot.config.get_by_id(message.guild.id)
+        data = await bot.config.find_by_id(message.guild.id)
         if not data or "prefix" not in data:
             prefix = bot.DEFAULTPREFIX
         else:
@@ -131,9 +134,59 @@ async def on_message(message):
     await bot.process_commands(message)
 
 
+@bot.command(name="eval", aliases=["exec"])
+@commands.is_owner()
+async def _eval(ctx, *, code):
+    await ctx.reply("Let me evaluate this code for you! Won't be a sec")
+    code = clean_code(code)
+
+    local_variables = {
+        "discord": discord,
+        "commands": commands,
+        "bot": bot,
+        "ctx": ctx,
+        "channel": ctx.channel,
+        "author": ctx.author,
+        "guild": ctx.guild,
+        "message": ctx.message,
+    }
+
+    stdout = io.StringIO()
+
+    try:
+        with contextlib.redirect_stdout(stdout):
+            exec(
+                f"async def func():\n{textwrap.indent(code, '    ')}", local_variables,
+            )
+
+            obj = await local_variables["func"]()
+            result = f"{stdout.getvalue()}\n-- {obj}\n"
+    except Exception as e:
+        result = "".join(format_exception(e, e, e.__traceback__))
+
+    pager = Pag(
+        timeout=100,
+        entries=[result[i : i + 2000] for i in range(0, len(result), 2000)],
+        length=1,
+        prefix="```py\n",
+        suffix="```",
+    )
+
+    await pager.start(ctx)
+
+
 if __name__ == "__main__":
     # When running this file, if it is the 'main' file
     # I.E its not being imported from another python file run this
+    bot.mongo = motor.motor_asyncio.AsyncIOMotorClient(str(bot.connection_url))
+    bot.db = bot.mongo["menudocs"]
+    bot.config = Document(bot.db, "config")
+    bot.mutes = Document(bot.db, "mutes")
+    bot.warns = Document(bot.db, "warns")
+    bot.invites = Document(bot.db, "invites")
+    bot.command_usage = Document(bot.db, "command_usage")
+    bot.reaction_roles = Document(bot.db, "reaction_roles")
+
     for file in os.listdir(cwd + "/cogs"):
         if file.endswith(".py") and not file.startswith("_"):
             bot.load_extension(f"cogs.{file[:-3]}")

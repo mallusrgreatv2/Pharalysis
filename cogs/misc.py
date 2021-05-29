@@ -1,4 +1,6 @@
+import asyncio
 import platform
+import random
 
 import discord
 from discord.ext import commands
@@ -33,7 +35,7 @@ class Misc(commands.Cog):
         embed.add_field(name="Discord.Py Version", value=dpyVersion)
         embed.add_field(name="Total Guilds:", value=serverCount)
         embed.add_field(name="Total Users:", value=memberCount)
-        embed.add_field(name="Bot Developers:", value="<@700397009336533032> | mallusrgreat#6991")
+        embed.add_field(name="Bot Developers:", value="<@271612318947868673>")
 
         embed.set_footer(text=f"Carpe Noctem | {self.bot.user.name}")
         embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
@@ -43,12 +45,45 @@ class Misc(commands.Cog):
     @commands.command(
         name="echo",
         description="A simple command that repeats the users input back to them.",
-        usage="[Message]",
     )
-    async def echo(self, ctx, *, message=None):
-        message = message or "Please provide the message to be repeated."
+    async def echo(self, ctx):
         await ctx.message.delete()
-        await ctx.send(message)
+        embed = discord.Embed(
+            title="Please tell me what you want me to repeat!",
+            description="||This request will timeout after 1 minute.||",
+        )
+        sent = await ctx.send(embed=embed)
+
+        try:
+            msg = await self.bot.wait_for(
+                "message",
+                timeout=60,
+                check=lambda message: message.author == ctx.author
+                and message.channel == ctx.channel,
+            )
+            if msg:
+                await sent.delete()
+                await msg.delete()
+                await ctx.send(msg.content)
+        except asyncio.TimeoutError:
+            await sent.delete()
+            await ctx.send("Cancelling", delete_after=10)
+
+    @commands.command(name="toggle", description="Enable or disable a command!")
+    @commands.is_owner()
+    async def toggle(self, ctx, *, command):
+        command = self.bot.get_command(command)
+
+        if command is None:
+            await ctx.send("I can't find a command with that name!")
+
+        elif ctx.command == command:
+            await ctx.send("You cannot disable this command.")
+
+        else:
+            command.enabled = not command.enabled
+            ternary = "enabled" if command.enabled else "disabled"
+            await ctx.send(f"I have {ternary} {command.qualified_name} for you!")
 
 
 def setup(bot):
