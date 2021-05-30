@@ -94,7 +94,7 @@ async def on_ready():
         f"-----\nLogged in as: {bot.user.name} : {bot.user.id}\n-----\nMy current prefix is: {bot.DEFAULTPREFIX}\n-----"
     )
     await bot.change_presence(
-        activity=discord.Game(name="Cries in Binary | 00111010 00101000")
+        activity=discord.Game(name="something catchy here | phelp")
     )  # This changes the bots 'activity'
 
     for document in await bot.config.get_all():
@@ -137,7 +137,6 @@ async def on_message(message):
 @bot.command(name="eval", aliases=["exec"])
 @commands.is_owner()
 async def _eval(ctx, *, code):
-    await ctx.reply("Let me evaluate this code for you! Won't be a sec")
     code = clean_code(code)
 
     local_variables = {
