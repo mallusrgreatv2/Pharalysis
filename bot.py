@@ -41,7 +41,6 @@ async def get_prefix(bot, message):
 
 intents = discord.Intents.all()  # Help command requires member intents
 DEFAULTPREFIX = "!"
-secret_file = utils.json_loader.read_json("secrets")
 bot = commands.Bot(
     command_prefix=get_prefix,
     case_insensitive=True,
@@ -50,10 +49,10 @@ bot = commands.Bot(
     intents=intents,
     description="Pharalysis"
 )  # change command_prefix='-' to command_prefix=get_prefix for custom prefixes
-bot.config_token = secret_file["token"]
-bot.connection_url = secret_file["mongo"]
+bot.config_token = os.environ['token']
+bot.connection_url = os.environ['mongo']
 
-bot.joke_api_key = secret_file["x-rapidapi-key"]
+bot.joke_api_key = os.environ['x-rapidapi-key']
 
 logging.basicConfig(level=logging.INFO)
 
