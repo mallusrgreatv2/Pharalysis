@@ -89,32 +89,22 @@ class Misc(commands.Cog):
     @commands.command()
     async def timer(self, ctx: commands.Context, time):
         _time = convert(time)
-        channel: discord.TextChannel = ctx.channel
-        webhooks = await channel.webhooks()
-        
-        if not webhooks:
-            webhook = await channel.create_webhook(name = "Pharalysis")
-            webhook = webhook.url
-        webhook = webhooks[0].url
-        async with aiohttp.ClientSession() as session:
-            wh = Webhook.from_url(url = webhook, adapter=AsyncWebhookAdapter(session))
-            embed = discord.Embed(title = "Timer", description = f"Ends in {time} seconds")
-            
-            message = await wh.send(embed=embed)
-            
-
+        try:
             secondint = _time
+            if secondint <= 0:
+                await ctx.send("Don't try to scam me")
+                return
+            embed = discord.Embed(title = "Timer", description = f"Ends in {_time} seconds")
+            message = await ctx.send(embed = embed)
             while True:
                 secondint -= 1
                 if secondint == 0:
-                    endemb = discord.Embed(title = "Timer", description = "Timer Ended")
-                    await message.edit(embed = endemb)
+                    await ctx.send(f"{ctx.author.mention}, Your timer ended!")
                     break
-                    
-                embed = discord.Embed(title = "Timer", description = f"Ends in {secondint}")
-                await message.edit(embed = embed)
-                await asyncio.sleep(1)
-            await ctx.send(f"{ctx.author.mention}, The timer has ended!")
+                editembed = discord.Embed(title = "Timer", description = f"Ends in {secondint}")
+                await message.edit(embed = editembed)
+        except Exception as e:
+            await ctx.send(e)
 
 
 def setup(bot):
