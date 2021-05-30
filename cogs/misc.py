@@ -103,6 +103,7 @@ class Misc(commands.Cog):
                     break
                 editembed = discord.Embed(title = "Timer", description = f"Ends in {secondint}")
                 await message.edit(embed = editembed)
+                await asyncio.sleep(1)
         except Exception as e:
             await ctx.send(e)
 
