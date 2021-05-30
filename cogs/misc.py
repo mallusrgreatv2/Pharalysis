@@ -1,9 +1,10 @@
 import asyncio
 import platform
-import random
-
+from discord import Webhook, AsyncWebhookAdapter
 import discord
 from discord.ext import commands
+from cogs.Giveaways import convert
+import aiohttp
 
 
 class Misc(commands.Cog):
@@ -84,6 +85,35 @@ class Misc(commands.Cog):
             command.enabled = not command.enabled
             ternary = "enabled" if command.enabled else "disabled"
             await ctx.send(f"I have {ternary} {command.qualified_name} for you!")
+        
+    @commands.command()
+    async def timer(self, ctx: commands.Context, time):
+        _time = convert(time)
+        channel: discord.TextChannel = ctx.channel
+        webhooks = await channel.webhooks()
+        webhook = webhooks[0].url
+        if not webhooks:
+            webhook = await channel.create_webhook(name = "Pharalysis")
+            webhook = webhook.url
+        async with aiohttp.ClientSession() as session:
+            wh = Webhook.from_url(url = webhook, adapter=AsyncWebhookAdapter(session))
+            embed = discord.Embed(title = "Timer", description = f"Ends in {time} seconds")
+            
+            message = await wh.send(embed=embed)
+            
+
+            secondint = _time
+            while True:
+                secondint -= 1
+                if secondint == 0:
+                    endemb = discord.Embed(title = "Timer", description = "Timer Ended")
+                    await message.edit(embed = endemb)
+                    break
+                    
+                embed = discord.Embed(title = "Timer", description = f"Ends in {secondint}")
+                await message.edit(embed = embed)
+                await asyncio.sleep(1)
+            await ctx.send(f"{ctx.author.mention}, The timer has ended!")
 
 
 def setup(bot):
