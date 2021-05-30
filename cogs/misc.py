@@ -91,10 +91,11 @@ class Misc(commands.Cog):
         _time = convert(time)
         channel: discord.TextChannel = ctx.channel
         webhooks = await channel.webhooks()
-        webhook = webhooks[0].url
+        
         if not webhooks:
             webhook = await channel.create_webhook(name = "Pharalysis")
             webhook = webhook.url
+        webhook = webhooks[0].url
         async with aiohttp.ClientSession() as session:
             wh = Webhook.from_url(url = webhook, adapter=AsyncWebhookAdapter(session))
             embed = discord.Embed(title = "Timer", description = f"Ends in {time} seconds")
