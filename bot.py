@@ -61,8 +61,7 @@ bot.DEFAULTPREFIX = DEFAULTPREFIX
 bot.blacklisted_users = []
 bot.muted_users = {}
 bot.cwd = cwd
-bot.applications = {"servers": {}}
-bot.appQuests = {"servers": {}}
+bot.suggestions = {}
 
 bot.version = "15"
 
