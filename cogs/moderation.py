@@ -1,3 +1,4 @@
+from cogs.Giveaways import convert
 import re
 import datetime
 from copy import deepcopy
@@ -212,6 +213,17 @@ class Moderation(commands.Cog):
             description=f"{amount} messages were cleared",
         )
         await ctx.send(embed=embed, delete_after=15)
+    
+    @commands.group(invoke_without_command=True)
+    async def slowmode(self, ctx):
+
+        await ctx.send(f"Slowmode of the channel **{ctx.channel.name}** is {ctx.channel.slowmode_delay} | Change/set it by using `PREFIXslowmode set <slowmode> [channel]`")
+    
+    @slowmode.group()
+    async def set(self, ctx, slowmode):
+        time = convert(slowmode)
+        await ctx.channel.edit(slowmode_delay=time)
+        await ctx.send(f"Changed this channel's slowmode to {ctx.channel.slowmode_delay} seconds")
 
 
 def setup(bot):
