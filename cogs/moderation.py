@@ -217,7 +217,7 @@ class Moderation(commands.Cog):
     @commands.group(invoke_without_command=True)
     async def slowmode(self, ctx):
 
-        await ctx.send(f"Slowmode of the channel **{ctx.channel.name}** is {ctx.channel.slowmode_delay} | Change/set it by using `PREFIXslowmode set <slowmode> [channel]`")
+        await ctx.send(f"Slowmode of the channel **{ctx.channel.name}** is {ctx.channel.slowmode_delay} second(s) | Change/set it by using `PREFIXslowmode set <slowmode> [channel]`")
     
     @slowmode.group()
     async def set(self, ctx, slowmode):
