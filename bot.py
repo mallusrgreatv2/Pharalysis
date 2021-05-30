@@ -45,7 +45,7 @@ secret_file = utils.json_loader.read_json("secrets")
 bot = commands.Bot(
     command_prefix=get_prefix,
     case_insensitive=True,
-    owner_id=271612318947868673,
+    owner_id=700397009336533032,
     help_command=None,
     intents=intents,
 )  # change command_prefix='-' to command_prefix=get_prefix for custom prefixes
