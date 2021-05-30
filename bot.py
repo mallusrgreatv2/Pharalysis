@@ -48,6 +48,7 @@ bot = commands.Bot(
     owner_id=700397009336533032,
     help_command=None,
     intents=intents,
+    description="Pharalysis"
 )  # change command_prefix='-' to command_prefix=get_prefix for custom prefixes
 bot.config_token = secret_file["token"]
 bot.connection_url = secret_file["mongo"]
@@ -60,6 +61,8 @@ bot.DEFAULTPREFIX = DEFAULTPREFIX
 bot.blacklisted_users = []
 bot.muted_users = {}
 bot.cwd = cwd
+bot.applications = {"servers": {}}
+bot.appQuests = {"servers": {}}
 
 bot.version = "15"
 

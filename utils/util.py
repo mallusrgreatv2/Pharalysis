@@ -2,6 +2,7 @@ import asyncio
 
 import discord
 from discord.ext.buttons import Paginator
+from discord.ext import commands
 
 
 class Pag(Paginator):
@@ -13,7 +14,7 @@ class Pag(Paginator):
 
 
 async def GetMessage(
-    bot, ctx, contentOne="Default Message", contentTwo="\uFEFF", timeout=100
+    bot: commands.Bot, ctx: commands.Context, contentOne: str="Default Message", contentTwo:str ="\uFEFF", timeout: int =100
 ):
     """
     This function sends an embed containing the params and then waits for a message to return
