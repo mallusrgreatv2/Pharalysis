@@ -8,7 +8,7 @@ class ReactionRole(commands.Cog):
     
     @commands.command()
     @commands.has_permissions(administrator=True, manage_roles=True)
-    async def reactrole(ctx, emoji, role: discord.Role, *, message):
+    async def reactrole(self, ctx, emoji, role: discord.Role, *, message):
 
         emb = discord.Embed(description=message)
         msg = await ctx.channel.send(embed=emb)
