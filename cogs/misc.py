@@ -99,7 +99,7 @@ class Misc(commands.Cog):
             embed = discord.Embed(title = "Timer", description = f"Ends in {_time} seconds")
             message = await ctx.send(embed = embed)
             while True:
-                secondint -= 7
+                secondint -= 1
                 if secondint <= 0:
                     await ctx.send(f"{ctx.author.mention}, Your timer ended!")
                     break
