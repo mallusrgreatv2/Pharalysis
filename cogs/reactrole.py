@@ -5,7 +5,8 @@ import json
 class ReactionRole(commands.Cog):
     def __init__(self, bot) -> None:
         self.bot = bot
-
+    
+    @commands.command()
     @commands.has_permissions(administrator=True, manage_roles=True)
     async def reactrole(ctx, emoji, role: discord.Role, *, message):
 
