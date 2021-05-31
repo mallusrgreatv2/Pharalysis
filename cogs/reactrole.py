@@ -1,49 +1,58 @@
 import discord
 from discord.ext import commands
 from utils.json_loader import read_json, write_json
-
+import json
 class ReactionRole(commands.Cog):
     def __init__(self, bot) -> None:
         self.bot = bot
 
-    @commands.command(name="reactionrole", aliases = ["rr", "reactrole", "reactionr", "rrole"])
-    async def reactionrole(self, ctx, role: discord.Role, emoji: discord.Emoji, *, message: str):
-        emb = discord.Embed(description = message)
-        msg = await ctx.send(embed = emb)
+    @commands.has_permissions(administrator=True, manage_roles=True)
+    async def reactrole(ctx, emoji, role: discord.Role, *, message):
+
+        emb = discord.Embed(description=message)
+        msg = await ctx.channel.send(embed=emb)
         await msg.add_reaction(emoji)
-        data = read_json("reactrole")
-        new_react_role = {
-            'role_name': role.name,
+
+        with open('reactrole.json') as json_file:
+            data = json.load(json_file)
+
+            new_react_role = {'role_name': role.name, 
             'role_id': role.id,
             'emoji': emoji,
-            'message_id': msg.id
-        }
-        data.append(new_react_role)
-        self.bot.react_role.append(new_react_role)
-        write_json(data, "reactrole")
-        
+            'message_id': msg.id}
+
+            data.append(new_react_role)
+
+        with open('reactrole.json', 'w') as f:
+            json.dump(data, f, indent=4)
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
+
         if payload.member.bot:
             pass
+
         else:
-            data = read_json("reactrole")
-            for x in data:
-                if x['emoji'] == payload.emoji.name and x['message_id'] == payload.message_id:
-                    role = discord.utils.get(self.bot.get_guild(payload.guild_id).roles, id=x['role_id'])
-                    await payload.member.add_roles(role)
+            with open('reactrole.json') as react_file:
+                data = json.load(react_file)
+                for x in data:
+                    if x['emoji'] == payload.emoji.name:
+                        role = discord.utils.get(self.bot.get_guild(
+                            payload.guild_id).roles, id=x['role_id'])
+
+                        await payload.member.add_roles(role)
 
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self, payload):
-        user = await self.bot.get_guild(payload.guild_id).get_member(payload.user_id)
-        if user.bot:
-            pass
-        else:
-            data = read_json("reactrole")
+
+        with open('reactrole.json') as react_file:
+            data = json.load(react_file)
             for x in data:
-                if x['emoji'] == payload.emoji.name and x['message_id'] == payload.message_id:
-                    role = discord.utils.get(self.bot.get_guild(payload.guild_id).roles, id=x['role_id'])
-                    user.remove_roles(role)
+                if x['emoji'] == payload.emoji.name:
+                    role = discord.utils.get(self.bot.get_guild(
+                        payload.guild_id).roles, id=x['role_id'])
+
+                    
+                    await self.bot.get_guild(payload.guild_id).get_member(payload.user_id).remove_roles(role)
 
 def setup(bot):
     bot.add_cog(ReactionRole(bot))
