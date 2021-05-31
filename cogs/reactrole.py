@@ -21,6 +21,29 @@ class ReactionRole(commands.Cog):
         data.append(new_react_role)
         self.bot.react_role.append(new_react_role)
         write_json(data, "reactrole")
+        
+    @commands.Cog.listener()
+    async def on_raw_reaction_add(self, payload):
+        if payload.member.bot:
+            pass
+        else:
+            data = read_json("reactrole")
+            for x in data:
+                if x['emoji'] == payload.emoji.name and x['message_id'] == payload.message_id:
+                    role = discord.utils.get(self.bot.get_guild(payload.guild_id).roles, id=x['role_id'])
+                    await payload.member.add_roles(role)
+
+    @commands.Cog.listener()
+    async def on_raw_reaction_remove(self, payload):
+        user = await self.bot.get_guild(payload.guild_id).get_member(payload.user_id)
+        if user.bot:
+            pass
+        else:
+            data = read_json("reactrole")
+            for x in data:
+                if x['emoji'] == payload.emoji.name and x['message_id'] == payload.message_id:
+                    role = discord.utils.get(self.bot.get_guild(payload.guild_id).roles, id=x['role_id'])
+                    user.remove_roles(role)
 
 def setup(bot):
     bot.add_cog(ReactionRole(bot))
