@@ -1,10 +1,12 @@
 import asyncio
 import platform
-from discord import Webhook, AsyncWebhookAdapter
 import discord
 from discord.ext import commands
 from cogs.Giveaways import convert
-import aiohttp
+import random
+import giphy_client
+from giphy_client.rest import ApiException
+
 
 
 class Misc(commands.Cog):
@@ -106,6 +108,28 @@ class Misc(commands.Cog):
                 await asyncio.sleep(1)
         except Exception as e:
             await ctx.send(e)
+
+
+
+    @commands.command()
+    async def gif(self, ctx,*,q="random"):
+
+        api_key=self.bot.giphy_api_key
+        api_instance = giphy_client.DefaultApi()
+
+        try: 
+        # Search Endpoint
+            
+            api_response = api_instance.gifs_search_get(api_key, q, limit=5, rating='g')
+            lst = list(api_response.data)
+            giff = random.choice(lst)
+
+            emb = discord.Embed(title=q)
+            emb.set_image(url = f'https://media.giphy.com/media/{giff.id}/giphy.gif')
+
+            await ctx.channel.send(embed=emb)
+        except ApiException as e:
+            print("Exception when calling DefaultApi->gifs_search_get: %s\n" % e)
 
 
 def setup(bot):

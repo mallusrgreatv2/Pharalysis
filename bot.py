@@ -54,6 +54,7 @@ bot.connection_url = os.environ['mongo']
 bot.react_role = []
 
 bot.joke_api_key = os.environ['x-rapidapi-key']
+bot.giphy_api_key = os.environ['giphy-key']
 
 logging.basicConfig(level=logging.INFO)
 
