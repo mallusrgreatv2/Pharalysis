@@ -1,5 +1,6 @@
 import random
 import datetime
+from utils.json_loader import read_json
 
 import discord
 from discord.ext import commands
@@ -11,7 +12,7 @@ from discord.ext import commands
 
 class Events(commands.Cog):
     def __init__(self, bot):
-        self.bot = bot
+        self.bot: commands.Bot = bot
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -77,7 +78,31 @@ class Events(commands.Cog):
             await ctx.send("Hey! You lack permission to use this command.")
         # Implement further custom checks for errors here...
         raise error
+    
+    @commands.Cog.listener()
+    async def on_raw_reaction_add(self, payload):
+        if payload.member.bot:
+            pass
+        else:
+            data = read_json("reactrole")
+            for x in data:
+                if x['emoji'] == payload.emoji.name and x['message_id'] == payload.message_id:
+                    role = discord.utils.get(self.bot.get_guild(payload.guild_id).roles, id=x['role_id'])
+                    await payload.member.add_roles(role)
 
+    @commands.Cog.listener()
+    async def on_raw_reaction_remove(self, payload):
+        user = await self.bot.get_guild(payload.guild_id).get_member(payload.user_id)
+        if user.bot:
+            pass
+        else:
+            data = read_json("reactrole")
+            for x in data:
+                if x['emoji'] == payload.emoji.name and x['message_id'] == payload.message_id:
+                    role = discord.utils.get(self.bot.get_guild(payload.guild_id).roles, id=x['role_id'])
+                    user.remove_roles(role)
+
+    
 
 def setup(bot):
     bot.add_cog(Events(bot))

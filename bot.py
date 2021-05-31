@@ -51,6 +51,7 @@ bot = commands.Bot(
 )  # change command_prefix='-' to command_prefix=get_prefix for custom prefixes
 bot.config_token = os.environ['token']
 bot.connection_url = os.environ['mongo']
+bot.react_role = []
 
 bot.joke_api_key = os.environ['x-rapidapi-key']
 
