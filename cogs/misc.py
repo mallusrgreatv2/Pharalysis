@@ -99,6 +99,7 @@ class Misc(commands.Cog):
             embed = discord.Embed(title = "Timer", description = f"Ends in {_time} seconds")
             message = await ctx.send(embed = embed)
             while True:
+                await asyncio.sleep(7)
                 secondint -= 7
                 if secondint == 0:
                     await ctx.send(f"{ctx.author.mention}, Your timer ended!")
@@ -106,7 +107,7 @@ class Misc(commands.Cog):
                 editembed = discord.Embed(title = "Timer", description = f"Ends in {secondint}")
                 editembed.set_footer(text = "Changes every 7 seconds")
                 await message.edit(embed = editembed)
-                await asyncio.sleep(7)
+                
         except Exception as e:
             await ctx.send(e)
 
