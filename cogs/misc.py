@@ -93,7 +93,7 @@ class Misc(commands.Cog):
         _time = convert(time)
         try:
             secondint = _time
-            if secondint <= 0 or secondint >= 300:
+            if secondint <= 0 or secondint > 300:
                 await ctx.send("Don't try to scam me")
                 return
             embed = discord.Embed(title = "Timer", description = f"Ends in {_time} seconds")
