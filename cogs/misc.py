@@ -93,21 +93,19 @@ class Misc(commands.Cog):
         _time = convert(time)
         try:
             secondint = _time
-            if secondint <= 0:
+            if secondint <= 0 or secondint >= 300:
                 await ctx.send("Don't try to scam me")
                 return
             embed = discord.Embed(title = "Timer", description = f"Ends in {_time} seconds")
             message = await ctx.send(embed = embed)
             while True:
-                await asyncio.sleep(7)
                 secondint -= 7
-                if secondint == 0:
+                if secondint <= 0:
                     await ctx.send(f"{ctx.author.mention}, Your timer ended!")
                     break
                 editembed = discord.Embed(title = "Timer", description = f"Ends in {secondint}")
-                editembed.set_footer(text = "Changes every 7 seconds")
                 await message.edit(embed = editembed)
-                
+                await asyncio.sleep(1)
         except Exception as e:
             await ctx.send(e)
 
