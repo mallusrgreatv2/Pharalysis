@@ -154,5 +154,13 @@ class Config(commands.Cog):
                         )
                 await ctx.send(embed=embed)
 
+    @commands.command(name = "support", aliases = ["halp", "invite", "inv", "addbot", "github", "add"])
+    async def support(self, ctx):
+        embed = discord.Embed(title = "Invite links", description = "Here are all the links related to Pharalysis!")
+        embed.add_field(name = "Support Server", value = "[Click here to join](https://bit.ly/pharasupport)", inline = True)
+        embed.add_field(name = "Bot invite", value = "[Click here to invite](https://bit.ly/pharalysis)", inline = True)
+        embed.add_field(name = "Bot Github", value = "[Click here for link](https://bit.ly/pharagh)")
+        await ctx.send(embed = embed)
+
 def setup(bot):
     bot.add_cog(Config(bot))
