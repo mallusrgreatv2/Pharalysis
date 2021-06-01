@@ -37,7 +37,8 @@ class Usage(commands.Cog):
         total_commands_run = sum(command_map.values())
 
         # Sort by value
-        sorted_list = sorted(command_map.items(), key=lambda x: x[1], reverse=True)
+        sorted_list = sorted(command_map.items(),
+                             key=lambda x: x[1], reverse=True)
 
         pages = []
         cmd_per_page = 10

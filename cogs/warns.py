@@ -10,7 +10,7 @@ class Warns(commands.Cog):
         
     @commands.command()
     @commands.guild_only()
-    @commands.has_role(566132980687568896)
+    @commands.has_guild_permissions(manage_messages = True)
     async def warn(self, ctx, member: discord.Member, *, reason):
         if member.id in [ctx.author.id, self.bot.user.id]:
             return await ctx.send("You cannot warn yourself or the bot!")
@@ -46,7 +46,7 @@ class Warns(commands.Cog):
             
     @commands.command()
     @commands.guild_only()
-    @commands.has_role(566132980687568896)
+    @commands.has_guild_permissions(manage_messages = True)
     async def warns(self, ctx, member: discord.Member):
         warn_filter = {"user_id": member.id, "guild_id": member.guild.id}
         warns = await self.bot.warns.find_many_by_custom(warn_filter)
@@ -74,7 +74,7 @@ class Warns(commands.Cog):
         ).start(ctx)
 
     @commands.command(aliases=["delwarn", "dw"])
-    @commands.has_role(566132980687568896)
+    @commands.has_guild_permissions(manage_messages = True)
     @commands.guild_only()
     async def deletewarn(self, ctx, member: discord.Member, warn: int = None):
         """Delete a warn / all warns from a given member"""
