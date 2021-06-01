@@ -1,5 +1,5 @@
 import os
-import random
+from utils.util import Pag
 import traceback
 
 import asyncio
@@ -156,15 +156,20 @@ class Config(commands.Cog):
 
     @commands.command(name="support", aliases=["halp", "invite", "inv", "addbot", "github", "add"])
     async def support(self, ctx):
-        embed = discord.Embed(
-            title="Invite links", description="Here are all the links related to Pharalysis!")
-        embed.add_field(name="Support Server",
-                        value="[Click here to join](https://bit.ly/pharasupport)", inline=True)
-        embed.add_field(
-            name="Bot invite", value="[Click here to invite](https://bit.ly/pharalysis)", inline=True)
-        embed.add_field(name="Bot Github",
-                        value="[Click here for link](https://bit.ly/pharagh)")
-        await ctx.send(embed=embed)
+        pages = []
+        embed1Title = "Bot invite link"
+        embed1Description = "[Click here](https://bit.ly/pharalysis)"
+        embed2Title = "Support server link"
+        embed2Description = "[Click here](https://discord.gg/xWV8mf7C8K)"
+        embed3Title = "Bot github"
+        embed3Description = "[Click here](https://github.com/mallusrgreatv2/Pharalysis)")
+        embed1 = discord.Embed(title = embed1Title, description = embed1Description)
+        pages.append(embed1)
+        embed2 = discord.Embed(title = embed2Title, description = embed2Description)
+        pages.append(embed2)
+        embed3 = discord.Embed(title = embed3Title, description = embed3Description)
+        pages.append(embed3)
+        await Pag(title="Bot links", color=0xCE2029, entries=pages, length=1).start(ctx)
 
 
 def setup(bot):
