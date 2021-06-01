@@ -162,7 +162,7 @@ class Config(commands.Cog):
         embed2Title = "Support server link"
         embed2Description = "[Click here](https://discord.gg/xWV8mf7C8K)"
         embed3Title = "Bot github"
-        embed3Description = "[Click here](https://github.com/mallusrgreatv2/Pharalysis)")
+        embed3Description = "[Click here](https://github.com/mallusrgreatv2/Pharalysis)"
         embed1 = discord.Embed(title = embed1Title, description = embed1Description)
         pages.append(embed1)
         embed2 = discord.Embed(title = embed2Title, description = embed2Description)
