@@ -1,6 +1,7 @@
 import asyncio
 import platform
 import discord
+from discord import client
 from discord.ext import commands
 from cogs.Giveaways import convert
 import random
@@ -115,6 +116,10 @@ class Misc(commands.Cog):
             await ctx.channel.send(embed=emb)
         except ApiException as e:
             print("Exception when calling DefaultApi->gifs_search_get: %s\n" % e)
+
+    @commands.command()
+    async def ping(self, ctx):
+        await ctx.send("Ping: "+ round(client.latency / 1000))
 
 
 def setup(bot):
