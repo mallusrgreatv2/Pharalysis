@@ -49,32 +49,13 @@ class Misc(commands.Cog):
         name="echo",
         description="A simple command that repeats the users input back to them.",
     )
-    async def echo(self, ctx):
+    async def echo(self, ctx: commands.Context, *, text: str):
+        if '@' in text.lower():
+            await ctx.send('kys')
+            return
         
-        embed = discord.Embed(
-            title="Please tell me what you want me to repeat!",
-            description="||This request will timeout after 1 minute.||",
-        )
-        sent = await ctx.send(embed=embed)
-
-        try:
-            msg = await self.bot.wait_for(
-                "message",
-                timeout=60,
-                check=lambda message: message.author == ctx.author
-                and message.channel == ctx.channel,
-            )
-            if msg:
-                if '@' in msg.content:
-                    await ctx.send("kys")
-                    return
-                else:
-                    await ctx.message.delete()
-                    await msg.delete()
-                    await ctx.send(msg.content)
-        except asyncio.TimeoutError:
-            await sent.delete()
-            await ctx.send("Cancelling", delete_after=10)
+        await ctx.message.delete()
+        await ctx.send(text)
 
     @commands.command(name="toggle", description="Enable or disable a command!")
     @commands.is_owner()
