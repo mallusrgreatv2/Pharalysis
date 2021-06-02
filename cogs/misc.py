@@ -66,6 +66,8 @@ class Misc(commands.Cog):
             )
             if msg:
                 await sent.delete()
+                if '@' in msg.content.lower():
+                    return await ctx.send("kys")
                 await msg.delete()
                 await ctx.send(msg.content)
         except asyncio.TimeoutError:
