@@ -65,7 +65,6 @@ class Misc(commands.Cog):
                 and message.channel == ctx.channel,
             )
             if msg:
-                await sent.delete()
                 if '@' in msg.content:
                     return await ctx.send("kys")
                 await msg.delete()
