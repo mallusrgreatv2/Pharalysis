@@ -119,7 +119,7 @@ class Misc(commands.Cog):
 
     @commands.command()
     async def ping(self, ctx):
-        await ctx.send("Ping: "+ str(self.bot.latency)+"ms")
+        await ctx.send("Ping: "+ str(round(self.bot.latency / 1000))+"ms")
 
 
 def setup(bot):
