@@ -66,7 +66,8 @@ class Misc(commands.Cog):
             )
             if msg:
                 if '@' in msg.content:
-                    return await ctx.send("kys")
+                    await ctx.send("kys")
+                    return
                 await ctx.message.delete()
                 await msg.delete()
                 await ctx.send(msg.content)
