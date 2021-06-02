@@ -50,7 +50,7 @@ class Misc(commands.Cog):
         description="A simple command that repeats the users input back to them.",
     )
     async def echo(self, ctx):
-        await ctx.message.delete()
+        
         embed = discord.Embed(
             title="Please tell me what you want me to repeat!",
             description="||This request will timeout after 1 minute.||",
@@ -67,6 +67,7 @@ class Misc(commands.Cog):
             if msg:
                 if '@' in msg.content:
                     return await ctx.send("kys")
+                await ctx.message.delete()
                 await msg.delete()
                 await ctx.send(msg.content)
         except asyncio.TimeoutError:
