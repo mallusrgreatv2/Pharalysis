@@ -34,7 +34,7 @@ class Suggestions(Cog):
             await ctx.send("No suggestion channel found. `{p}setSuggestionChannel #channel`")
             return
         
-        channel = await self.bot.get_channel(f"{data}")
+        channel = self.bot.get_channel(f"{data}")
         emb = discord.Embed(title="New Suggestion!",
                             description=suggestion)
         emb.set_footer(text=f"Suggested by {ctx.author.name}#{ctx.author.discriminator}")
