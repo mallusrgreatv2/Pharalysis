@@ -40,7 +40,7 @@ async def get_prefix(bot, message):
 
 
 intents = discord.Intents.all()  # Help command requires member intents
-DEFAULTPREFIX = "!"
+DEFAULTPREFIX = "p"
 bot = commands.Bot(
     command_prefix=get_prefix,
     case_insensitive=True,
