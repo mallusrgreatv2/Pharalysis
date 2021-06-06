@@ -29,12 +29,12 @@ class Suggestions(Cog):
     @commands.command()
     async def suggest(self, ctx, *, suggestion):
         data = read_json("suggestion")
-        data = data[f"{ctx.guild.id}"]
+        data = data[ctx.guild.id]
         if not data:
             await ctx.send("No suggestion channel found. `{p}setSuggestionChannel #channel`")
             return
         
-        channel = self.bot.get_channel(data)
+        channel = self.bot.get_channel(f"{data}")
         emb = discord.Embed(title="New Suggestion!",
                             description=suggestion)
         emb.set_footer(text=f"Suggested by {ctx.author.name}#{ctx.author.discriminator}")
